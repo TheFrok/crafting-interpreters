@@ -7,12 +7,14 @@ import static com.craftinginterpreters.lox.TokenType.*;
 
 class Parser {
     private static class ParseError extends RuntimeException {}
+    private boolean isInteractive = false;
 
     private final List<Token> tokens;
     private int current = 0;
 
-    Parser(List<Token> tokens) {
+    Parser(List<Token> tokens, boolean interactivity) {
         this.tokens = tokens;
+        this.isInteractive = interactivity;
     }
 
     List<Stmt> parse() {
@@ -67,6 +69,9 @@ class Parser {
 
     private Stmt expressionStatement() {
         Expr expr = expression();
+        if (isAtEnd() && isInteractive) {
+            return new Stmt.Print(expr);
+        }
         consume(SEMICOLON, "Expect ';' after value.");
         return new Stmt.Expression(expr);
     }
