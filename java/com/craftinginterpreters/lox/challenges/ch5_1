@@ -1,0 +1,8 @@
+expr -> NUMBER
+expr -> IDENTIFIER
+expr -> expr "." IDENTIFIER
+expr -> expr call
+call -> "(" params ")"
+params -> expr
+params -> expr "," params
+params -> ""
