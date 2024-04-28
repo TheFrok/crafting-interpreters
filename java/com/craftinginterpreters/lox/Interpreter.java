@@ -66,7 +66,7 @@ class Interpreter implements Expr.Visitor<Object>,
         // Unreachable.
         return null;
     }
-    
+
     @Override
     public Object visitVariableExpr(Expr.Variable expr) {
         return environment.get(expr.name);
@@ -131,6 +131,13 @@ class Interpreter implements Expr.Visitor<Object>,
     @Override
     public Void visitExpressionStmt(Stmt.Expression stmt) {
         evaluate(stmt.expression);
+        return null;
+    }
+
+    @Override
+    public Void visitFunctionStmt(Stmt.Function stmt) {
+        LoxFunction function = new LoxFunction(stmt);
+        environment.define(stmt.name.lexeme, function);
         return null;
     }
 
