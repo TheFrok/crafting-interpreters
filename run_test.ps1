@@ -15,10 +15,11 @@ function Compare-With-Golden {
 }
 
 $testsDir = "tests"
+$goldenDir = Join-Path -Path $testsDir -ChildPath "data"
 Get-ChildItem "tests" -Filter *.lox | Foreach-Object {
     $loxFile = Join-Path -Path $testsDir -ChildPath $_
-    $golden = $loxFile + ".data"
-    $diff = Compare-With-Golden "java -jar .\\Lox.jar" $loxFile $golden
+    $golden = Join-Path -Path $goldenDir -ChildPath ($_.Name + ".data")
+    $diff = Compare-With-Golden "java -jar .\\build\\Lox.jar" $loxFile $golden
     if ($diff -eq $null) {
         echo "[PASSED] $loxFile"
     } else {
